@@ -8,6 +8,7 @@
 const PROJECTS = [
   {
     id: "bioprinting",
+    featured: true,
     cover: "bio-print.jpg",
     year: "2025 - 2026",
     fr: {
@@ -87,6 +88,7 @@ const PROJECTS = [
 
   {
     id: "martinique",
+    featured: true,
     cover: "mq-station.jpg",
     year: "2026",
     fr: {
@@ -246,92 +248,221 @@ const PROJECTS = [
     ],
   },
 
+  /* --- How to Make (Almost) Anything : un mini-projet par atelier --- */
   {
-    id: "hmaa",
-    cover: "cloud.jpg",
+    id: "hmaa-montre",
+    cover: "hmaa-pcb-montre.jpg",
     year: "2025 - 2026",
     fr: {
-      title: "How to Make (Almost) Anything",
-      context: "Majeure Creative Technology - HM(A)A, cours inspiré du MIT",
-      lead: "Une série d'ateliers de la majeure Creative Technology, inspirés du cours du MIT : à chaque module, de nouveaux outils et un objet à fabriquer. Conception d'une montre intelligente pour les coureurs, assemblage et soudure d'une console de type Gameboy, flûte de pan imprimée en 3D, modification d'un signal vidéo VGA et premiers pas en intelligence artificielle.",
-      meta: {
-        Outils: "KiCad, ESP32, Rhino 3D, Fusion 360, Bambu Lab, découpe laser, Cricut, Arduino, Raspberry Pi, p5.js, ml5.js",
-      },
+      title: "Montre pour coureurs",
+      context: "HM(A)A - majeure Creative Technology",
+      lead: "Premier atelier de How to Make (Almost) Anything, cours de la majeure Creative Technology inspiré du MIT : conception d'un PCB de montre intelligente pensée pour les coureurs, puis assemblage et soudure d'une console de type Gameboy.",
+      meta: { Outils: "KiCad, XIAO ESP32-S3, soudure" },
       sections: [
         { title: "Électronique & PCB", items: [
-          "Conception sous KiCad d'une montre intelligente pensée pour les coureurs, autour d'un XIAO ESP32-S3",
+          "Schéma et routage sous KiCad d'une montre intelligente autour d'un XIAO ESP32-S3",
+          "Moteur vibrant et LED RGB intégrés au PCB",
           "Assemblage et soudure d'une console de type Gameboy",
         ]},
-        { title: "Flûte de pan « nuage »", items: [
-          "Consigne : créer un instrument à vent, on a choisi d'inventer le nôtre",
-          "Tests d'un tube seul (un do), puis d'une version à fente, avant de garder la plus simple",
-          "Modèle final en PLA effet marbre, environ 2 h 30 d'impression, perles transparentes en guise de pluie",
-          "Aussi : Arbo Laser, un arbre décoratif découpé au laser, feuilles et oiseaux à la Cricut",
-        ], link: ["Documentation atelier 2", "https://oil-giraffe-c54.notion.site/Documentation-HMAA-2nd-workshop-294bf791352280d5ad24d0cfab967bf9"] },
-        { title: "Signal vidéo VGA", items: [
-          "Soudure d'un PCB qui modifie en temps réel les couleurs d'une vidéo (Raspberry Pi) avec 3 potentiomètres R, G, B",
-          "Debug des soudures au multimètre jusqu'à obtenir les trois couleurs",
-          "Arduino + VGAX : motifs générés, « Stickman VS Cactus » inspiré du jeu du dinosaure de Google, et un labyrinthe",
-        ], link: ["Documentation semaine 3", "https://bow-chalk-0b1.notion.site/HMAA-Week-3-Process-images-2dfcb55dd23580b585add97a6f65caca"] },
-        { title: "Intelligence artificielle", items: [
-          "Reconnaissance de postures de yoga avec Teachable Machine",
-          "Réseaux de neurones et convolution calculés à la main, puis codés en p5.js",
-          "« Weird interactions » avec ml5.js : composer son numéro en « mangeant » les chiffres, un poème révélé en ouvrant la bouche",
-        ], link: ["Documentation semaine 4", "https://bow-chalk-0b1.notion.site/HMAA-Week-4-Learning-AI-2fccb55dd235802e83e1c0e6e72970eb"] },
       ],
     },
     en: {
-      title: "How to Make (Almost) Anything",
-      context: "Creative Technology major - HM(A)A, MIT-inspired course",
-      lead: "A series of workshops in the Creative Technology major, inspired by the MIT course: each module brings new tools and an object to build. Designing a smartwatch for runners, assembling and soldering a Gameboy-style console, a 3D-printed pan flute, modifying a VGA video signal and first steps in artificial intelligence.",
-      meta: {
-        Tools: "KiCad, ESP32, Rhino 3D, Fusion 360, Bambu Lab, laser cutting, Cricut, Arduino, Raspberry Pi, p5.js, ml5.js",
-      },
+      title: "Smartwatch for runners",
+      context: "HM(A)A - Creative Technology major",
+      lead: "First workshop of How to Make (Almost) Anything, an MIT-inspired course in the Creative Technology major: designing the PCB of a smartwatch for runners, then assembling and soldering a Gameboy-style console.",
+      meta: { Tools: "KiCad, XIAO ESP32-S3, soldering" },
       sections: [
         { title: "Electronics & PCB", items: [
-          "Designing a smartwatch for runners in KiCad, built around a XIAO ESP32-S3",
+          "KiCad schematic and routing of a smartwatch built around a XIAO ESP32-S3",
+          "Vibration motor and RGB LED integrated on the PCB",
           "Assembling and soldering a Gameboy-style console",
         ]},
-        { title: "“Cloud” pan flute", items: [
-          "Brief: build a wind instrument, we chose to invent our own",
-          "Testing a single tube (a C note), then a slotted version, before keeping the simplest one",
-          "Final model in marble-effect PLA, about 2.5 h of printing, transparent beads as raindrops",
-          "Also: Arbo Laser, a laser-cut decorative tree with Cricut-cut leaves and birds",
-        ], link: ["Workshop 2 documentation", "https://oil-giraffe-c54.notion.site/Documentation-HMAA-2nd-workshop-294bf791352280d5ad24d0cfab967bf9"] },
-        { title: "VGA video signal", items: [
-          "Soldering a PCB that changes a video's colours in real time (Raspberry Pi) with 3 R, G, B potentiometers",
-          "Debugging the solder joints with a multimeter until all three colours worked",
-          "Arduino + VGAX: generated patterns, “Stickman VS Cactus” inspired by Google's dinosaur game, and a maze",
-        ], link: ["Week 3 documentation", "https://bow-chalk-0b1.notion.site/HMAA-Week-3-Process-images-2dfcb55dd23580b585add97a6f65caca"] },
-        { title: "Artificial intelligence", items: [
-          "Yoga pose recognition with Teachable Machine",
-          "Neural networks and convolution computed by hand, then coded in p5.js",
-          "“Weird interactions” with ml5.js: dialling a phone number by “eating” digits, a poem revealed by opening your mouth",
-        ], link: ["Week 4 documentation", "https://bow-chalk-0b1.notion.site/HMAA-Week-4-Learning-AI-2fccb55dd235802e83e1c0e6e72970eb"] },
       ],
     },
     gallery: [
       ["hmaa-pcb-montre.jpg", "PCB de la montre conçu sous KiCad", "Smartwatch PCB designed in KiCad"],
+    ],
+    links: [],
+  },
+
+  {
+    id: "hmaa-flute",
+    cover: "cloud.jpg",
+    year: "2025 - 2026",
+    fr: {
+      title: "Flûte de pan « nuage »",
+      context: "HM(A)A - majeure Creative Technology",
+      lead: "Atelier modélisation et impression 3D de How to Make (Almost) Anything : la consigne était de créer un instrument à vent, on a choisi d'inventer le nôtre, une flûte de pan cachée dans un nuage.",
+      meta: { Outils: "Rhino 3D, Fusion 360, Bambu Studio" },
+      sections: [
+        { title: "Du croquis à l'instrument", items: [
+          "Test d'un tube seul (un do), puis d'une version à fente, avant de garder la plus simple",
+          "Version avec toutes les notes, puis un nuage plus volumineux et réaliste",
+          "Modèle final en PLA effet marbre, environ 2 h 30 d'impression, perles transparentes en guise de pluie",
+        ]},
+      ],
+    },
+    en: {
+      title: "“Cloud” pan flute",
+      context: "HM(A)A - Creative Technology major",
+      lead: "3D modelling and printing workshop of How to Make (Almost) Anything: the brief was to build a wind instrument, we chose to invent our own, a pan flute hidden inside a cloud.",
+      meta: { Tools: "Rhino 3D, Fusion 360, Bambu Studio" },
+      sections: [
+        { title: "From sketch to instrument", items: [
+          "Testing a single tube (a C note), then a slotted version, before keeping the simplest one",
+          "A version with every note, then a fuller, more realistic cloud",
+          "Final model in marble-effect PLA, about 2.5 h of printing, transparent beads as raindrops",
+        ]},
+      ],
+    },
+    gallery: [
+      ["cloud.jpg", "Flûte de pan « nuage »", "“Cloud” pan flute"],
       ["hmaa-flute-croquis.jpg", "Croquis : un nuage + une flûte de pan", "Sketch: a cloud + a pan flute"],
       ["hmaa-flute-tube.jpg", "Test d'un tube seul", "Single tube test"],
       ["hmaa-flute-slicer.jpg", "Préparation de l'impression", "Preparing the print"],
       ["hmaa-flute-modele.jpg", "Modèle 3D final du nuage", "Final 3D model of the cloud"],
-      ["cloud.jpg", "Flûte de pan « nuage »", "“Cloud” pan flute"],
-      ["hmaa-arbo-laser.jpg", "Arbo Laser : structure découpée au laser", "Arbo Laser: laser-cut structure"],
-      ["hmaa-arbo-feuilles.jpg", "Feuilles découpées à la Cricut et colorées", "Cricut-cut, hand-coloured leaves"],
+    ],
+    links: [
+      { fr: "Documentation", en: "Documentation", href: "https://oil-giraffe-c54.notion.site/Documentation-HMAA-2nd-workshop-294bf791352280d5ad24d0cfab967bf9" },
+    ],
+  },
+
+  {
+    id: "hmaa-arbo",
+    cover: "hmaa-arbo-final.jpg",
+    year: "2025 - 2026",
+    fr: {
+      title: "Arbo Laser",
+      context: "HM(A)A - majeure Creative Technology",
+      lead: "Atelier découpe de How to Make (Almost) Anything : créer un objet 3D assemblé à partir d'une technique de découpe. Un arbre décoratif en bois découpé au laser, habillé de feuilles et d'oiseaux.",
+      meta: { Outils: "Rhino 3D, découpe laser, Cricut" },
+      sections: [
+        { title: "Fabrication", items: [
+          "Premier prototype à la Cricut pour valider la forme et l'assemblage",
+          "Passage à la découpe laser pour des détails plus fins et une finition plus propre",
+          "Feuilles et oiseaux découpés à la Cricut, colorés à la main puis assemblés sur la structure",
+        ]},
+      ],
+    },
+    en: {
+      title: "Arbo Laser",
+      context: "HM(A)A - Creative Technology major",
+      lead: "Cutting workshop of How to Make (Almost) Anything: building an assembled 3D object with a cutting technique. A laser-cut decorative wooden tree, dressed with leaves and birds.",
+      meta: { Tools: "Rhino 3D, laser cutting, Cricut" },
+      sections: [
+        { title: "Making", items: [
+          "First Cricut prototype to validate the shape and the assembly",
+          "Moving to laser cutting for finer details and a cleaner finish",
+          "Cricut-cut leaves and birds, hand-coloured and assembled onto the structure",
+        ]},
+      ],
+    },
+    gallery: [
       ["hmaa-arbo-final.jpg", "Arbo Laser final", "Final Arbo Laser"],
+      ["hmaa-arbo-laser.jpg", "Structure découpée au laser", "Laser-cut structure"],
+      ["hmaa-arbo-feuilles.jpg", "Feuilles découpées à la Cricut et colorées", "Cricut-cut, hand-coloured leaves"],
+    ],
+    links: [
+      { fr: "Documentation", en: "Documentation", href: "https://oil-giraffe-c54.notion.site/Documentation-HMAA-2nd-workshop-294bf791352280d5ad24d0cfab967bf9" },
+    ],
+  },
+
+  {
+    id: "hmaa-vga",
+    cover: "maze.jpg",
+    year: "2025 - 2026",
+    fr: {
+      title: "Signal vidéo VGA",
+      context: "HM(A)A - majeure Creative Technology",
+      lead: "Atelier images de How to Make (Almost) Anything : jouer en temps réel avec les couleurs d'une vidéo grâce à l'électronique, puis générer des images et des jeux sur un écran VGA avec un Arduino.",
+      meta: { Outils: "Raspberry Pi, soudure, Arduino, VGAX, C++" },
+      sections: [
+        { title: "PCB vidéo", items: [
+          "Soudure d'un PCB qui modifie les couleurs d'une vidéo (Raspberry Pi) avec 3 potentiomètres R, G, B",
+          "Debug des soudures au multimètre jusqu'à obtenir les trois couleurs",
+        ]},
+        { title: "Arduino + VGA", items: [
+          "Motifs générés par équations avec la bibliothèque VGAX",
+          "« Stickman VS Cactus », inspiré du jeu du dinosaure de Google, avec un bouton poussoir",
+          "Un labyrinthe : le joueur est le pixel jaune, piloté au clavier",
+        ]},
+      ],
+    },
+    en: {
+      title: "VGA video signal",
+      context: "HM(A)A - Creative Technology major",
+      lead: "Image workshop of How to Make (Almost) Anything: playing with a video's colours in real time through electronics, then generating images and games on a VGA screen with an Arduino.",
+      meta: { Tools: "Raspberry Pi, soldering, Arduino, VGAX, C++" },
+      sections: [
+        { title: "Video PCB", items: [
+          "Soldering a PCB that changes a video's colours (Raspberry Pi) with 3 R, G, B potentiometers",
+          "Debugging the solder joints with a multimeter until all three colours worked",
+        ]},
+        { title: "Arduino + VGA", items: [
+          "Patterns generated from equations with the VGAX library",
+          "“Stickman VS Cactus”, inspired by Google's dinosaur game, with a push button",
+          "A maze: the player is the yellow pixel, driven from the keyboard",
+        ]},
+      ],
+    },
+    gallery: [
+      ["maze.jpg", "Labyrinthe VGA piloté par Arduino", "Arduino-driven VGA maze"],
       ["hmaa-vga-composants.jpg", "Composants du PCB vidéo", "Video PCB components"],
       ["hmaa-vga-pcb.jpg", "Plan du PCB vidéo", "Video PCB layout"],
       ["hmaa-vga-test.jpg", "Premier test : seulement le vert", "First test: green only"],
       ["hmaa-vga-couleurs.jpg", "Réglage des couleurs aux potentiomètres", "Tuning colours with the potentiometers"],
       ["hmaa-vga-schema.jpg", "Schéma Arduino + VGA (VGAX)", "Arduino + VGA schematic (VGAX)"],
       ["hmaa-vga-arduino.jpg", "Montage Arduino sur breadboard", "Arduino breadboard build"],
-      ["maze.jpg", "Labyrinthe VGA piloté par Arduino", "Arduino-driven VGA maze"],
-      ["hmaa-ia-yoga.jpg", "Base de données de postures (Teachable Machine)", "Pose dataset (Teachable Machine)"],
+    ],
+    links: [
+      { fr: "Documentation", en: "Documentation", href: "https://bow-chalk-0b1.notion.site/HMAA-Week-3-Process-images-2dfcb55dd23580b585add97a6f65caca" },
+    ],
+  },
+
+  {
+    id: "hmaa-ia",
+    cover: "hmaa-ia-perceptron.jpg",
+    year: "2025 - 2026",
+    fr: {
+      title: "Apprendre l'IA",
+      context: "HM(A)A - majeure Creative Technology",
+      lead: "Atelier intelligence artificielle de How to Make (Almost) Anything : comprendre les réseaux de neurones à la main, puis concevoir des interactions volontairement « étranges » pilotées par la vision par ordinateur.",
+      meta: { Outils: "Teachable Machine, p5.js, ml5.js (FaceMesh)" },
+      sections: [
+        { title: "Comprendre", items: [
+          "Reconnaissance de postures de yoga avec Teachable Machine",
+          "Perceptron et convolution calculés à la main, puis codés en p5.js",
+        ]},
+        { title: "Weird interactions", items: [
+          "Composer son numéro de téléphone en « mangeant » les chiffres à l'écran",
+          "An attentive Machine : un poème révélé mot à mot en ouvrant la bouche, qui s'efface quand on part",
+        ]},
+      ],
+    },
+    en: {
+      title: "Learning AI",
+      context: "HM(A)A - Creative Technology major",
+      lead: "Artificial intelligence workshop of How to Make (Almost) Anything: understanding neural networks by hand, then designing deliberately “weird” interactions driven by computer vision.",
+      meta: { Tools: "Teachable Machine, p5.js, ml5.js (FaceMesh)" },
+      sections: [
+        { title: "Understanding", items: [
+          "Yoga pose recognition with Teachable Machine",
+          "Perceptron and convolution computed by hand, then coded in p5.js",
+        ]},
+        { title: "Weird interactions", items: [
+          "Dialling a phone number by “eating” the digits on screen",
+          "An attentive Machine: a poem revealed word by word by opening your mouth, fading when you leave",
+        ]},
+      ],
+    },
+    gallery: [
       ["hmaa-ia-perceptron.jpg", "Perceptron entraîné à la main", "Perceptron trained by hand"],
       ["hmaa-ia-convolution.jpg", "Convolution calculée à la main", "Convolution computed by hand"],
+      ["hmaa-ia-yoga.jpg", "Base de données de postures (Teachable Machine)", "Pose dataset (Teachable Machine)"],
     ],
-    links: [],
+    links: [
+      { fr: "Documentation", en: "Documentation", href: "https://bow-chalk-0b1.notion.site/HMAA-Week-4-Learning-AI-2fccb55dd235802e83e1c0e6e72970eb" },
+    ],
   },
 
   {

@@ -1,0 +1,7 @@
+quand on passe la souris au dessus de chaque projet sans cliquer ce serait cool que les photos du projet défilent au lieu davoir juste limage principale
+la bule " a la recherche dun stage de fin detude" faudrait quelle soit comme les autres bulles de la page de garde, ca grossit comme si cetait cliquable
+page de garde : enleve le trait entre "charlotte houdaille" et ma description et baisse ma photo, met la centrée par rapport a ces deux choses
+en bas mon adresse mail, le bulle fait la de la meme couleur que la bulle LinkedIn
+et le LinkedIn fait la meme animation de changement de couleur que lemail, quand la souris passe dessus ca devient bleu foncé
+ya un gros soucis quand je dézoom (photo joint) essaie de faire que ce soit au centre quand on dézoom genre comme quand on dézoom un pdf
+il faudrait ameliorer le layout telephone, il faut que ce soit adaptable a différents format d'ecran

@@ -1,0 +1,252 @@
+/* ==========================================================
+   Constellation des compétences + schémas animés des projets
+   ========================================================== */
+
+/* ==========================================================
+   Constellation
+   ========================================================== */
+.constellation {
+  position: relative;
+  margin-top: 40px;
+  border-radius: 28px;
+  background: var(--navy);
+  color: var(--cream);
+  overflow: hidden;
+}
+.constellation__svg { display: block; width: 100%; height: auto; }
+.constellation__hint {
+  margin: 0;
+  padding: 0 24px 20px;
+  font-size: 14px;
+  color: rgba(250, 246, 239, .72);
+}
+
+.constellation__stars circle {
+  fill: var(--blue);
+  opacity: .35;
+  animation: twinkle 3.5s ease-in-out infinite;
+}
+@keyframes twinkle { 50% { opacity: .9; } }
+
+.constellation__edge {
+  stroke: rgba(211, 226, 242, .26);
+  stroke-width: 1.2;
+  transition: stroke .3s, stroke-width .3s, opacity .3s;
+}
+.constellation__edge.is-on { stroke: var(--blue); stroke-width: 2.2; }
+.has-focus .constellation__edge:not(.is-on) { opacity: .12; }
+
+/* Zone de survol invisible : le point ET son étiquette */
+.constellation__hit { fill: transparent; }
+.constellation__node { cursor: pointer; outline: none; transition: opacity .3s; }
+.constellation__node text {
+  fill: var(--cream);
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 500;
+}
+.constellation__node--skill circle { fill: var(--blue); }
+.constellation__node--project circle {
+  fill: var(--navy);
+  stroke: var(--blue);
+  stroke-width: 3;
+}
+.constellation__node--project text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+}
+.has-focus .constellation__node:not(.is-on) { opacity: .25; }
+.constellation__node.is-on circle { fill: var(--cream); }
+.constellation__node--project.is-on circle { fill: var(--blue); stroke: var(--cream); }
+.constellation__node:focus-visible circle { stroke: var(--cream); stroke-width: 3; }
+.is-narrow .constellation__node text { font-size: 19px; }
+
+/* Aperçu du projet survolé */
+.constellation__preview {
+  position: absolute;
+  z-index: 2;
+  width: 240px;
+  padding: 10px 10px 14px;
+  border-radius: 16px;
+  background: var(--cream);
+  color: var(--navy);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .25);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px) scale(.97);
+  transition: opacity .25s, transform .3s var(--ease);
+}
+.constellation__preview.is-visible { opacity: 1; transform: none; }
+.constellation__preview img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--blue);
+}
+.constellation__preview strong {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: -.02em;
+  line-height: 1.15;
+}
+.constellation__preview span { display: block; margin-top: 4px; font-size: 13px; color: var(--navy-soft); }
+.constellation__preview em { display: block; margin-top: 8px; font-size: 12px; font-style: normal; font-weight: 600; }
+
+/* ==========================================================
+   Fiches projet : schéma à droite du titre
+   ========================================================== */
+/* Grille interne : le bandeau bleu reste un bloc normal et va jusqu'au bord */
+.p-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 340px);
+  align-items: center;
+  gap: 28px clamp(28px, 4vw, 64px);
+}
+/* Schéma posé directement sur le bandeau, sans cadre ni légende */
+.p-hero__schema { margin: 0; }
+
+.schema { display: block; width: 100%; height: auto; overflow: visible; }
+.schema * {
+  fill: none;
+  stroke: var(--navy);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.schema .f-cream { fill: var(--cream); }
+.schema .f-navy { fill: var(--navy); }
+.schema .f-blue { fill: var(--blue); }
+.schema .thin { stroke-width: 1.8; }
+.schema .dashed { stroke-dasharray: 5 5; }
+
+/* Tracés qui se dessinent (complets au repos, redessinés à l'animation) */
+.schema [pathLength] { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.schema .dashed[pathLength] { stroke-dasharray: .04 .04; }
+.schema.is-playing .draw { animation: sch-draw 1.4s var(--ease) both; animation-delay: var(--d, 0s); }
+@keyframes sch-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+
+/* Bio-impression (imprimante 3D, piloté en JS) : hydrogel translucide */
+.schema .gel { fill: rgba(250, 246, 239, .62); stroke-width: 1; }
+.schema .gel--side { fill: rgba(250, 246, 239, .45); }
+.schema .gel--top { fill: rgba(250, 246, 239, .85); }
+.schema .gel-shine { stroke: #fff; stroke-width: 3; opacity: .9; }
+.schema .gel-bubble { fill: rgba(255, 255, 255, .7); stroke-width: .9; }
+/* Filament de gel : contour foncé + cœur clair */
+.schema .bp-trace--out { stroke-width: 4.5; }
+.schema .bp-trace--in { stroke: var(--cream); stroke-width: 2.2; }
+
+/* PCB */
+.schema.is-playing .pcb-led { animation: pcb-led .5s ease-in-out 4 both; animation-delay: 1s; }
+@keyframes pcb-led { 50% { fill: var(--navy); } }
+.pcb-led-ray { opacity: 0; }
+.schema.is-playing .pcb-led-ray { animation: sch-blink .5s ease-in-out 4 both; animation-delay: 1s; }
+.pcb-motor { transform-box: fill-box; transform-origin: center; }
+.schema.is-playing .pcb-motor { animation: sch-spin .4s linear 5; animation-delay: 1s; stroke-dasharray: 6 4; }
+
+/* Champignon */
+.my-shroom { transform-origin: 120px 132px; }
+.my-shroom--small { transform-origin: 165px 132px; }
+.schema.is-playing .my-shroom { animation: my-grow .9s var(--ease) both; animation-delay: .8s; }
+.schema.is-playing .my-shroom--small { animation-delay: 1.2s; }
+@keyframes my-grow { from { transform: scale(0, 0); } 60% { transform: scale(1.06, 1.1); } }
+
+/* Observatoire */
+.mq-anemo { transform-origin: 70px 50px; }
+.schema.is-playing .mq-anemo { animation: sch-spin .7s linear 3; }
+.schema.is-playing .mq-wave { animation: sch-blink 1s ease-in-out 2 both; animation-delay: var(--d, 0s); }
+.mq-sun { transform-origin: 192px 38px; }
+.schema.is-playing .mq-sun { animation: sch-spin 2.6s ease-in-out 1; }
+@keyframes sch-spin { to { transform: rotate(360deg); } }
+@keyframes sch-blink { 0%, 100% { opacity: .15; } 50% { opacity: 1; } }
+
+/* ORIKA */
+.ok-open { transform-origin: 120px 90px; }
+.ok-closed { transform-origin: 120px 96px; opacity: 0; }
+.schema.is-playing .ok-open { animation: ok-fold 3s var(--ease) both; }
+.schema.is-playing .ok-closed { animation: ok-show 3s var(--ease) both; }
+@keyframes ok-fold {
+  0%, 35% { opacity: 1; transform: none; }
+  60%, 100% { opacity: 0; transform: rotate(45deg) scale(.55); }
+}
+@keyframes ok-show {
+  0%, 45% { opacity: 0; transform: scale(1.25); }
+  70%, 100% { opacity: 1; transform: none; }
+}
+
+/* Montre */
+.mw-vib { opacity: 0; }
+.schema.is-playing .mw-vib { animation: sch-blink .35s ease-in-out 4 both; animation-delay: 1.2s; }
+.schema.is-playing .mw-body { animation: mw-shake .07s linear 18; animation-delay: 1.2s; }
+@keyframes mw-shake { 50% { transform: translateX(1.6px); } }
+
+/* Flûte nuage */
+.fl-rain { transform-origin: 120px 112px; }
+.schema.is-playing .fl-rain { animation: fl-sway 1.2s ease-in-out 2; }
+@keyframes fl-sway { 25% { transform: rotate(3deg); } 75% { transform: rotate(-3deg); } }
+.fl-note { opacity: 0; }
+.schema.is-playing .fl-note { animation: fl-note 1.5s ease-out both; animation-delay: var(--d, 0s); }
+@keyframes fl-note {
+  0% { opacity: 0; transform: translateY(14px); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-16px); }
+}
+
+/* Arbo Laser */
+.ab-leaf { transform-box: fill-box; transform-origin: left center; }
+.schema.is-playing .ab-leaf { animation: ab-pop .45s var(--ease) both; animation-delay: var(--d, 0s); }
+.ab-bird > path, .ab-fly { transform-box: fill-box; }
+.schema.is-playing .ab-bird > path { animation: ab-bird .6s ease both; animation-delay: 2.2s; }
+.schema.is-playing .ab-fly { animation: ab-bird .6s ease both; animation-delay: var(--d, 2.3s); }
+@keyframes ab-pop { from { transform: scale(0); } }
+@keyframes ab-bird { from { opacity: 0; transform: translateY(-8px); } }
+
+/* IA */
+.schema.is-playing .ia-edge { animation: ia-flow 1s linear 2 both; animation-delay: var(--d, 0s); stroke-dasharray: 4 6; }
+@keyframes ia-flow { from { stroke-dashoffset: 20; } to { stroke-dashoffset: 0; } }
+.schema.is-playing .ia-node { animation: ia-node 1.6s ease both; animation-delay: var(--d, 0s); }
+@keyframes ia-node { 30%, 70% { fill: var(--navy); } }
+
+/* Raid */
+.rd-plan { stroke-dasharray: 4 6; stroke-width: 2; opacity: .5; }
+
+/* ---------- Mini-jeu labyrinthe dans la fiche VGA ---------- */
+/* Labyrinthe posé directement sur le bandeau, sans cadre */
+.p-hero__schema canvas {
+  display: block;
+  width: 100%;
+  outline: none;
+}
+.p-hero__schema canvas:focus-visible { outline: 2px dashed var(--navy); outline-offset: 4px; }
+.maze__status { margin: 8px 0 0; font-size: 13px; line-height: 1.4; }
+.maze__bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.maze__pad { display: none; gap: 4px; }
+.maze__bar button {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1.5px solid var(--navy);
+  background: var(--blue);
+  color: var(--navy);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.maze__bar button:hover { background: var(--navy); color: var(--cream); }
+
+@media (hover: none) { .maze__pad { display: flex; } }
+@media (max-width: 760px) {
+  .constellation { border-radius: 20px; }
+  .constellation__hint { padding: 0 18px 16px; }
+  .p-hero__grid { grid-template-columns: 1fr; padding-right: 0; }
+  .p-hero__schema { max-width: 300px; }
+  .maze__pad { display: flex; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .schema * { animation: none !important; }
+}

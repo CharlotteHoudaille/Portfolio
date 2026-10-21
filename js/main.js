@@ -54,24 +54,66 @@ updateNav();
    PROJETS - génération des cartes
    ---------------------------------------------------------- */
 const track = document.querySelector(".projects__track");
+const featuredBox = document.querySelector(".featured");
 
-PROJECTS.forEach((p, i) => {
+function makeCard(p, big) {
   const t = p[LANG];
   const card = document.createElement("button");
   card.type = "button";
-  card.className = "card";
+  card.className = big ? "card card--big" : "card";
   card.dataset.id = p.id;
   card.setAttribute("aria-label", `${t.title} - ${UI.open}`);
   card.innerHTML = `
     <div class="card__media">
-      <span class="card__num">${String(i + 1).padStart(2, "0")}</span>
-      <img src="${IMG + p.cover}" alt="" loading="lazy" draggable="false">
+      <img class="is-active" src="${IMG + p.cover}" alt="" loading="lazy" draggable="false">
     </div>
     <span class="card__title" data-reveal>${t.title}</span>
-    <span class="card__meta">${p.year} · ${t.context}</span>`;
-  track.appendChild(card);
-});
+    <span class="card__meta">${p.year} · ${t.context}</span>
+    ${big ? `<span class="card__lead">${t.lead}</span>` : ""}`;
+  hoverSlides(card, p);
+  return card;
+}
+
+// Au survol d'une carte, les photos du projet défilent
+function hoverSlides(card, p) {
+  const box = card.querySelector(".card__media");
+  const srcs = [p.cover, ...p.gallery.map(([src]) => src)]
+    .filter((src, k, all) => all.indexOf(src) === k && !/\.(mp4|webm|mov)$/i.test(src));
+  if (srcs.length < 2 || reduceMotion) return;
+  let imgs = null, k = 0, timer = null;
+
+  function show(n) {
+    imgs.forEach((img, j) => img.classList.toggle("is-active", j === n));
+  }
+  card.addEventListener("pointerenter", (e) => {
+    if (e.pointerType !== "mouse") return;
+    if (!imgs) {
+      imgs = [box.querySelector("img")];
+      srcs.slice(1).forEach((src) => {
+        const img = document.createElement("img");
+        img.src = IMG + src;
+        img.alt = "";
+        img.draggable = false;
+        box.appendChild(img);
+        imgs.push(img);
+      });
+    }
+    clearInterval(timer);
+    timer = setInterval(() => { k = (k + 1) % imgs.length; show(k); }, 850);
+  });
+  card.addEventListener("pointerleave", () => {
+    clearInterval(timer);
+    if (imgs) { k = 0; show(0); }
+  });
+}
+
+PROJECTS.filter((p) => p.featured).forEach((p) => featuredBox.appendChild(makeCard(p, true)));
+PROJECTS.filter((p) => !p.featured).forEach((p) => track.appendChild(makeCard(p, false)));
 document.querySelector(".projects__count").textContent = `(${PROJECTS.length})`;
+featuredBox.addEventListener("click", (e) => {
+  const card = e.target.closest(".card");
+  if (card) openProject(card.dataset.id, card);
+});
 
 /* ----------------------------------------------------------
    PROJETS - swipe horizontal (tactile natif + glisser souris)
@@ -201,6 +243,65 @@ function setupReveal(el) {
 document.querySelectorAll("[data-reveal]").forEach(setupReveal);
 
 /* ----------------------------------------------------------
+   PARCOURS - life map : une ligne qui relie les étapes et se
+   dessine au fil du scroll
+   ---------------------------------------------------------- */
+(function lifemap() {
+  const map = document.querySelector(".lifemap");
+  if (!map) return;
+  const svg = map.querySelector(".lifemap__svg");
+  const track = map.querySelector(".lifemap__track");
+  const line = map.querySelector(".lifemap__line");
+  const stops = [...map.querySelectorAll(".lifemap__stop")];
+  let length = 0;
+  let stopYs = [];
+  let samples = []; // [longueur, y] le long du tracé
+
+  function build() {
+    const box = map.getBoundingClientRect();
+    const pts = stops.map((s) => {
+      const r = s.querySelector(".lifemap__dot").getBoundingClientRect();
+      return { x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top };
+    });
+    // Courbes en S : on quitte chaque point à la verticale, puis on traverse l'écran
+    let d = `M ${pts[0].x} ${pts[0].y}`;
+    for (let k = 1; k < pts.length; k++) {
+      const a = pts[k - 1], b = pts[k];
+      const dy = (b.y - a.y) * 0.55;
+      d += ` C ${a.x} ${a.y + dy}, ${b.x} ${b.y - dy}, ${b.x} ${b.y}`;
+    }
+    svg.setAttribute("viewBox", `0 0 ${box.width} ${box.height}`);
+    track.setAttribute("d", d);
+    line.setAttribute("d", d);
+    length = line.getTotalLength();
+    line.style.strokeDasharray = `${length}`;
+    // Échantillonne le tracé pour savoir quelle longueur correspond à quelle hauteur
+    samples = [];
+    for (let l = 0; l <= length; l += 6) samples.push([l, line.getPointAtLength(l).y]);
+    samples.push([length, pts[pts.length - 1].y]);
+    stopYs = pts.map((p) => p.y);
+    update();
+  }
+
+  function update() {
+    const r = map.getBoundingClientRect();
+    // La pointe de la ligne suit le scroll, aux 2/3 de la hauteur de l'écran
+    const tip = reduceMotion ? Infinity : window.innerHeight * 0.66 - r.top;
+    let drawn = 0;
+    for (const [l, y] of samples) { if (y <= tip) drawn = l; else break; }
+    if (tip >= stopYs[stopYs.length - 1]) drawn = length;
+    line.style.strokeDashoffset = `${length - drawn}`;
+    stops.forEach((s, k) => s.classList.toggle("is-reached", tip >= stopYs[k] - 4));
+  }
+
+  window.addEventListener("scroll", update, { passive: true });
+  window.addEventListener("resize", build);
+  window.addEventListener("load", build);
+  if (document.fonts) document.fonts.ready.then(build);
+  build();
+})();
+
+/* ----------------------------------------------------------
    Curseur : un cercle + un trait qui suit la souris et s'efface
    ---------------------------------------------------------- */
 (function cursor() {
@@ -238,10 +339,13 @@ document.querySelectorAll("[data-reveal]").forEach(setupReveal);
     const target = e.target instanceof Element ? e.target : null;
     const onReveal = !!target?.closest(".reveal");
     // Sur un texte "filtre", le disque remplace le curseur : pas de point ni de trait
+    // Sur une zone foncée ([data-dark]), le point et le trait passent en clair
+    const onDark = !!target?.closest("[data-dark]");
     if (onReveal) points = [];
-    else if (!reduceMotion) points.push({ x, y, t: performance.now() });
+    else if (!reduceMotion) points.push({ x, y, t: performance.now(), dark: onDark });
     ring.classList.toggle("is-hidden", onReveal);
-    ring.classList.toggle("is-hover", !!target?.closest("a, button"));
+    ring.classList.toggle("is-light", onDark);
+    ring.classList.toggle("is-hover", !!target?.closest("a, button, [role='button']"));
   });
   document.addEventListener("pointerleave", () => ring.classList.add("is-hidden"));
   document.addEventListener("pointerenter", () => ring.classList.remove("is-hidden"));
@@ -260,7 +364,9 @@ document.querySelectorAll("[data-reveal]").forEach(setupReveal);
       for (let k = 1; k < points.length - 1; k++) {
         const a = points[k - 1], b = points[k], c = points[k + 1];
         const life = 1 - (now - b.t) / LIFE;
-        ctx.strokeStyle = `rgba(26, 54, 93, ${(life * 0.7).toFixed(3)})`;
+        ctx.strokeStyle = b.dark
+          ? `rgba(250, 246, 239, ${(life * 0.8).toFixed(3)})`
+          : `rgba(26, 54, 93, ${(life * 0.7).toFixed(3)})`;
         ctx.lineWidth = 0.6 + 1.6 * life;
         ctx.beginPath();
         ctx.moveTo((a.x + b.x) / 2, (a.y + b.y) / 2);
@@ -321,6 +427,8 @@ function openProject(id, trigger) {
   void sheet.offsetHeight; // force le rendu de l'état fermé avant l'animation
   panel.classList.add("is-open");
   sheet.focus({ preventScroll: true });
+  // Point d'accroche pour des modules optionnels (ex. avant / après)
+  document.dispatchEvent(new CustomEvent("projectopen", { detail: { id } }));
 }
 
 function closeProject() {
